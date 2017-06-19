@@ -33,17 +33,18 @@ export default class Pdf extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.source != this.props.source) {
             __DEV__ && console.log("componentWillReceiveProps: source changed");
-            this._loadFromSource(nextProps.source);
+            this._loadFromSource(nextProps.source, nextProps.headers);
         }
     }
 
     componentDidMount() {
-        this._loadFromSource(this.props.source);
+        this._loadFromSource(this.props.source, this.props.headers);
     }
 
-    _loadFromSource = (newSource) => {
+    _loadFromSource = (newSource, headers) => {
 
         const source = resolveAssetSource(newSource) || {};
+        const workingHeaders = resolveAssetSource(headers) || null;
         __DEV__ && console.log("PDF source:");
         __DEV__ && console.log(source);
 
@@ -65,18 +66,18 @@ export default class Pdf extends Component {
                         this.setState({path:cacheFile, isDownloaded:true});
                     } else {
                         // cache not exist then re load it
-                        this._prepareFile(source);
+                        this._prepareFile(source, workingHeaders);
                     }
                 })
                 .catch(() => {
-                    this._prepareFile(source);
+                    this._prepareFile(source, workingHeaders);
                 });
         } else {
-            this._prepareFile(source);
+            this._prepareFile(source, workingHeaders);
         }
     }
 
-    _prepareFile = (source) => {
+    _prepareFile = (source, headers) => {
 
         if (source.uri) {
 
@@ -93,7 +94,7 @@ export default class Pdf extends Component {
 
 
             if (isNetwork) {
-                this._downloadFile(uri, cacheFile);
+                this._downloadFile(uri, cacheFile, headers);
             } else if (isAsset) {
                 RNFetchBlob.fs.cp(uri, cacheFile)
                 .then(() => {
@@ -128,7 +129,7 @@ export default class Pdf extends Component {
 
     }
 
-    _downloadFile = (url, cacheFile) => {
+    _downloadFile = (url, cacheFile, headers) => {
 
         if (this.lastRNBFTask!=null) {
             this.lastRNBFTask.cancel((err) => {
@@ -142,7 +143,7 @@ export default class Pdf extends Component {
                 path: cacheFile
             })
             .fetch('GET', url, {
-                this.props.headers
+                ...headers
             });
 
         this.lastRNBFTask.then((res) => {
