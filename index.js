@@ -142,7 +142,7 @@ export default class Pdf extends Component {
                 path: cacheFile
             })
             .fetch('GET', url, {
-                //some headers ..
+                this.props.headers
             });
 
         this.lastRNBFTask.then((res) => {
@@ -212,7 +212,8 @@ Pdf.propTypes = {
     onChange: PropTypes.func,
     onLoadComplete: PropTypes.func,
     onPageChanged: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+    headers: PropTypes.object
 };
 
 var PdfCustom = requireNativeComponent('RCTPdf', Pdf, {
