@@ -48,3 +48,4 @@ yarn-error.log
 /android/*.project
 .settings
 .vscode
+build

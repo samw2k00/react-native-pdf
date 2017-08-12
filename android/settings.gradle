@@ -1,4 +1,6 @@
 rootProject.name = 'android'
 
 include ':libs:android-pdf-viewer'
-include ':RNAndroidPdfViewer'
+project(':libs').projectDir = new File(settingsDir, './libs')
+project(':libs:android-pdf-viewer').projectDir = new File(settingsDir, './libs/android-pdf-viewer')
+
