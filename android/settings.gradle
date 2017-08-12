@@ -1,6 +1,4 @@
-rootProject.name = 'android'
+rootProject.name = 'react-native-pdf'
 
-include ':libs:android-pdf-viewer'
-project(':libs').projectDir = new File(settingsDir, './libs')
-project(':libs:android-pdf-viewer').projectDir = new File(settingsDir, './libs/android-pdf-viewer')
+include ':src'
 
